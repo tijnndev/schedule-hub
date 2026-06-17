@@ -1,0 +1,68 @@
+{
+  "id": "c202e50e-5800-40cb-927a-de4032b892bc",
+  "flow": "csv-import",
+  "trigger": "manual",
+  "startedAt": "2026-06-17T20:19:02.951Z",
+  "completedAt": "2026-06-17T20:19:02.951Z",
+  "status": "error",
+  "initialInput": null,
+  "steps": [
+    {
+      "index": 0,
+      "action": "read-file",
+      "input": null,
+      "output": {
+        "rows": [
+          {
+            "id": 1,
+            "name": "Widget A",
+            "price": 19.99
+          },
+          {
+            "id": 2,
+            "name": "Widget B",
+            "price": -5
+          },
+          {
+            "id": 3,
+            "name": "Widget C",
+            "price": 29.99
+          }
+        ]
+      },
+      "error": null,
+      "duration": 0,
+      "status": "success"
+    },
+    {
+      "index": 1,
+      "action": "validate-rows",
+      "input": {
+        "rows": [
+          {
+            "id": 1,
+            "name": "Widget A",
+            "price": 19.99
+          },
+          {
+            "id": 2,
+            "name": "Widget B",
+            "price": -5
+          },
+          {
+            "id": 3,
+            "name": "Widget C",
+            "price": 29.99
+          }
+        ]
+      },
+      "output": null,
+      "error": {
+        "message": "Validation failed: 1 row(s) have negative prices (ids: 2)",
+        "stack": "Error: Validation failed: 1 row(s) have negative prices (ids: 2)\n    at Action.fn (C:\\Development\\Projects\\powerautomate-package\\demo\\server.js:115:13)\n    at Action.execute (C:\\Development\\Projects\\powerautomate-package\\src\\Action.js:9:23)\n    at ExecutionEngine.run (C:\\Development\\Projects\\powerautomate-package\\src\\ExecutionEngine.js:38:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async C:\\Development\\Projects\\powerautomate-package\\src\\Flowcraft.js:120:24"
+      },
+      "duration": 0,
+      "status": "error"
+    }
+  ]
+}

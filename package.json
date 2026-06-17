@@ -1,0 +1,17 @@
+{
+  "name": "flowcraft",
+  "version": "1.0.0",
+  "description": "A Power Automate-like workflow automation package for Node.js",
+  "main": "src/index.js",
+  "scripts": {
+    "demo": "node demo/server.js"
+  },
+  "dependencies": {
+    "node-cron": "^4.3.0",
+    "uuid": "^14.0.0"
+  },
+  "peerDependencies": {
+    "express": "^4.0.0 || ^5.0.0"
+  },
+  "license": "MIT"
+}

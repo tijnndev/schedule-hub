@@ -1,0 +1,115 @@
+{
+  "id": "817f2f1c-0a58-48c7-add1-943bd4f1c0ff",
+  "flow": "health-check",
+  "trigger": "interval",
+  "startedAt": "2026-06-17T20:22:10.592Z",
+  "completedAt": "2026-06-17T20:22:10.594Z",
+  "status": "success",
+  "initialInput": null,
+  "steps": [
+    {
+      "index": 0,
+      "action": "check-services",
+      "source": "async () => {\r\n  const services = ['database', 'cache', 'api', 'storage'];\r\n  return {\r\n    services: services.map(s => ({\r\n      name: s,\r\n      status: Math.random() > 0.1 ? 'healthy' : 'degraded',\r\n      responseTime: Math.round(Math.random() * 200),\r\n      checkedAt: new Date().toISOString(),\r\n    })),\r\n  };\r\n}",
+      "input": null,
+      "output": {
+        "services": [
+          {
+            "name": "database",
+            "status": "healthy",
+            "responseTime": 24,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "cache",
+            "status": "healthy",
+            "responseTime": 91,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "api",
+            "status": "healthy",
+            "responseTime": 181,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "storage",
+            "status": "healthy",
+            "responseTime": 172,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          }
+        ]
+      },
+      "error": null,
+      "duration": 0,
+      "status": "success"
+    },
+    {
+      "index": 1,
+      "action": "evaluate-health",
+      "source": "async (input) => {\r\n  const unhealthy = input.services.filter(s => s.status !== 'healthy');\r\n  return {\r\n    overall: unhealthy.length === 0 ? 'healthy' : 'degraded',\r\n    services: input.services,\r\n    issues: unhealthy.map(s => s.name),\r\n    avgResponseTime: Math.round(\r\n      input.services.reduce((a, b) => a + b.responseTime, 0) / input.services.length\r\n    ),\r\n  };\r\n}",
+      "input": {
+        "services": [
+          {
+            "name": "database",
+            "status": "healthy",
+            "responseTime": 24,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "cache",
+            "status": "healthy",
+            "responseTime": 91,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "api",
+            "status": "healthy",
+            "responseTime": 181,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "storage",
+            "status": "healthy",
+            "responseTime": 172,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          }
+        ]
+      },
+      "output": {
+        "overall": "healthy",
+        "services": [
+          {
+            "name": "database",
+            "status": "healthy",
+            "responseTime": 24,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "cache",
+            "status": "healthy",
+            "responseTime": 91,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "api",
+            "status": "healthy",
+            "responseTime": 181,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          },
+          {
+            "name": "storage",
+            "status": "healthy",
+            "responseTime": 172,
+            "checkedAt": "2026-06-17T20:22:10.593Z"
+          }
+        ],
+        "issues": [],
+        "avgResponseTime": 117
+      },
+      "error": null,
+      "duration": 1,
+      "status": "success"
+    }
+  ]
+}

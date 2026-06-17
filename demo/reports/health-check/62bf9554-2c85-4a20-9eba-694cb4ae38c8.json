@@ -1,0 +1,115 @@
+{
+  "id": "62bf9554-2c85-4a20-9eba-694cb4ae38c8",
+  "flow": "health-check",
+  "trigger": "interval",
+  "startedAt": "2026-06-17T20:17:00.588Z",
+  "completedAt": "2026-06-17T20:17:00.588Z",
+  "status": "success",
+  "initialInput": null,
+  "steps": [
+    {
+      "index": 0,
+      "action": "check-services",
+      "input": null,
+      "output": {
+        "services": [
+          {
+            "name": "database",
+            "status": "healthy",
+            "responseTime": 30,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "cache",
+            "status": "healthy",
+            "responseTime": 86,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "api",
+            "status": "healthy",
+            "responseTime": 47,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "storage",
+            "status": "degraded",
+            "responseTime": 163,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          }
+        ]
+      },
+      "error": null,
+      "duration": 0,
+      "status": "success"
+    },
+    {
+      "index": 1,
+      "action": "evaluate-health",
+      "input": {
+        "services": [
+          {
+            "name": "database",
+            "status": "healthy",
+            "responseTime": 30,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "cache",
+            "status": "healthy",
+            "responseTime": 86,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "api",
+            "status": "healthy",
+            "responseTime": 47,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "storage",
+            "status": "degraded",
+            "responseTime": 163,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          }
+        ]
+      },
+      "output": {
+        "overall": "degraded",
+        "services": [
+          {
+            "name": "database",
+            "status": "healthy",
+            "responseTime": 30,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "cache",
+            "status": "healthy",
+            "responseTime": 86,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "api",
+            "status": "healthy",
+            "responseTime": 47,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          },
+          {
+            "name": "storage",
+            "status": "degraded",
+            "responseTime": 163,
+            "checkedAt": "2026-06-17T20:17:00.588Z"
+          }
+        ],
+        "issues": [
+          "storage"
+        ],
+        "avgResponseTime": 82
+      },
+      "error": null,
+      "duration": 0,
+      "status": "success"
+    }
+  ]
+}

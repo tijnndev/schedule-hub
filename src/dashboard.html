@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flowcraft</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f9fb;
+      --surface: #ffffff;
+      --border: #e2e6ed;
+      --text: #1a1d23;
+      --text-secondary: #6b7280;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --error: #dc2626;
+      --error-bg: #fef2f2;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --running-bg: #eff6ff;
+      --running: #2563eb;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* --- Header --- */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 28px;
+      height: 28px;
+    }
+
+    .header h1 {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+
+    /* --- Layout --- */
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* --- Sidebar --- */
+    .sidebar {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      padding: 0 16px;
+      margin-bottom: 24px;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      padding: 0 8px;
+      margin-bottom: 8px;
+    }
+
+    .flow-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 14px;
+    }
+
+    .flow-item:hover { background: var(--bg); }
+    .flow-item.active { background: #eff6ff; color: var(--primary); }
+
+    .flow-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .flow-item.active .flow-icon { background: #dbeafe; }
+
+    .flow-icon svg { width: 16px; height: 16px; color: var(--text-secondary); }
+    .flow-item.active .flow-icon svg { color: var(--primary); }
+
+    .flow-info { min-width: 0; }
+    .flow-name { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .flow-schedule { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+
+    /* --- Main content --- */
+    .main {
+      padding: 28px 32px;
+      overflow-y: auto;
+    }
+
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .main-header h2 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
+      font-family: var(--font);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--bg); }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .btn svg { width: 14px; height: 14px; }
+
+    /* --- Cards --- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-body { padding: 20px; }
+
+    /* --- Flow graph / visual --- */
+    .flow-canvas {
+      padding: 32px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+
+    .flow-graph {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .flow-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .node-box {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 20px;
+      min-width: 140px;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .node-box:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .node-box.trigger-node {
+      border-color: var(--primary);
+      background: #f0f5ff;
+    }
+
+    .node-box.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .source-panel {
+      margin-top: 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .source-panel-header {
+      padding: 12px 16px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .source-panel-header .step-num {
+      width: 20px;
+      height: 20px;
+      font-size: 10px;
+    }
+
+    .source-code {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 16px 20px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+      tab-size: 2;
+    }
+
+    .source-code .kw { color: #cba6f7; }
+    .source-code .str { color: #a6e3a1; }
+    .source-code .num { color: #fab387; }
+    .source-code .cm { color: #6c7086; }
+    .source-code .fn { color: #89b4fa; }
+    .source-code .op { color: #89dceb; }
+
+    .node-index {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg);
+      padding: 0 6px;
+      border-radius: 10px;
+    }
+
+    .node-label {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .node-status {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .flow-connector {
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+    }
+
+    .connector-line {
+      width: 40px;
+      height: 2px;
+      background: var(--border);
+      position: relative;
+    }
+
+    .connector-line::after {
+      content: '';
+      position: absolute;
+      right: -1px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 6px solid var(--border);
+    }
+
+    /* --- Status badges --- */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .badge-success { background: var(--success-bg); color: var(--success); }
+    .badge-error { background: var(--error-bg); color: var(--error); }
+    .badge-running { background: var(--running-bg); color: var(--running); }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* --- Reports table --- */
+    .reports-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .reports-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .reports-table td {
+      padding: 12px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .reports-table tr:last-child td { border-bottom: none; }
+
+    .reports-table tr:hover td { background: var(--bg); }
+
+    .exec-id {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .duration { font-family: var(--mono); font-size: 12px; }
+    .timestamp { font-size: 12px; color: var(--text-secondary); }
+
+    /* --- Detail panel --- */
+    .step-detail {
+      margin-top: 16px;
+    }
+
+    .step-accordion {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+
+    .step-accordion-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      cursor: pointer;
+      background: var(--bg);
+      transition: background 0.15s;
+    }
+
+    .step-accordion-header:hover { background: #eef1f6; }
+
+    .step-accordion-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-accordion-name { font-size: 13px; font-weight: 500; }
+
+    .step-accordion-body {
+      padding: 0 16px 16px;
+      display: none;
+    }
+
+    .step-accordion.open .step-accordion-body { display: block; }
+
+    .step-accordion .chevron {
+      transition: transform 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .step-accordion.open .chevron { transform: rotate(180deg); }
+
+    .io-block {
+      margin-top: 12px;
+    }
+
+    .io-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .io-content {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* --- Empty state --- */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+
+    .empty-state svg { width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.4; }
+    .empty-state h3 { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+    .empty-state p { font-size: 13px; }
+
+    /* --- Loading --- */
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* --- Modal overlay --- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface);
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      width: 720px;
+      max-width: 90vw;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 { font-size: 16px; font-weight: 600; }
+
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 4px;
+    }
+
+    .modal-close:hover { color: var(--text); }
+
+    .modal-body { padding: 24px; }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main { padding: 16px; }
+    }
+
+    /* --- Tabs --- */
+    .tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.15s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: var(--font);
+    }
+
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    /* --- Stats row --- */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .stat-value { font-size: 24px; font-weight: 600; }
+
+    .actions-row {
+      display: flex;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <svg class="logo" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="28" height="28" rx="6" fill="#2563eb"/>
+        <path d="M8 10h4v8H8zM16 8h4v12h-4z" fill="#fff" opacity="0.9"/>
+        <path d="M12 14h4" stroke="#fff" stroke-width="2"/>
+      </svg>
+      <h1>Flowcraft</h1>
+    </div>
+    <div class="header-right">
+      <div class="status-dot"></div>
+      <span id="connectionStatus">Connected</span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Flows</div>
+        <div id="flowList"></div>
+      </div>
+    </div>
+
+    <div class="main" id="mainContent">
+      <div class="empty-state">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="12" width="16" height="12" rx="3" stroke="currentColor" stroke-width="2"/>
+          <rect x="28" y="12" width="16" height="12" rx="3" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 18h8" stroke="currentColor" stroke-width="2"/>
+          <circle cx="24" cy="18" r="2" fill="currentColor"/>
+        </svg>
+        <h3>Select a flow</h3>
+        <p>Choose a flow from the sidebar to view its details and execution history.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report detail modal -->
+  <div class="modal-overlay" id="reportModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Execution Detail</h3>
+        <button class="modal-close" onclick="closeModal()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const BASE = window.location.pathname.replace(/\/$/, '');
+
+    let flows = [];
+    let activeFlow = null;
+    let activeTab = 'graph';
+
+    async function api(path, options) {
+      const res = await fetch(BASE + path, options);
+      return res.json();
+    }
+
+    async function init() {
+      flows = await api('/api/flows');
+      renderFlowList();
+      
+      // Check URL for flow and tab params and auto-select
+      const params = new URLSearchParams(window.location.search);
+      const flowParam = params.get('flow');
+      const tabParam = params.get('tab');
+      if (flowParam && flows.some(f => f.flow === flowParam)) {
+        await selectFlow(flowParam);
+        if (tabParam && ['graph', 'history'].includes(tabParam)) {
+          activeTab = tabParam;
+          setTimeout(() => showTab(document.querySelector(`[onclick*="'${tabParam}'"]`), tabParam), 0);
+        }
+      }
+    }
+
+    function renderFlowList() {
+      const el = document.getElementById('flowList');
+      el.innerHTML = flows.map(f => `
+        <div class="flow-item ${activeFlow === f.flow ? 'active' : ''}" onclick="selectFlow('${f.flow}')">
+          <div class="flow-icon">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="5" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="10" y="4" width="5" height="4" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M6 6h4" stroke="currentColor" stroke-width="1.2"/></svg>
+          </div>
+          <div class="flow-info">
+            <div class="flow-name">${f.flow}</div>
+            <div class="flow-schedule">${f.schedule ? f.schedule.type + ': ' + f.schedule.value : 'manual'}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function selectFlow(name) {
+      activeFlow = name;
+      renderFlowList();
+      const flow = flows.find(f => f.flow === name);
+      const reports = await api(`/api/flows/${name}/reports`);
+      renderFlowDetail(flow, reports);
+      
+      // Update URL with flow param
+      const params = new URLSearchParams(window.location.search);
+      params.set('flow', name);
+      window.history.pushState(null, '', '?' + params.toString());
+    }
+
+    function renderFlowDetail(flow, reports) {
+      const main = document.getElementById('mainContent');
+      const successCount = reports.filter(r => r.status === 'success').length;
+      const errorCount = reports.filter(r => r.status === 'error').length;
+
+      main.innerHTML = `
+        <div class="main-header">
+          <h2>${flow.flow}</h2>
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="runFlow('${flow.flow}')">
+              <svg viewBox="0 0 16 16" fill="none"><polygon points="4,2 14,8 4,14" fill="currentColor"/></svg>
+              Run now
+            </button>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Total runs</div>
+            <div class="stat-value">${reports.length}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Successful</div>
+            <div class="stat-value" style="color: var(--success)">${successCount}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Failed</div>
+            <div class="stat-value" style="color: var(--error)">${errorCount}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Steps</div>
+            <div class="stat-value">${flow.nodes.length}</div>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab ${activeTab === 'graph' ? 'active' : ''}" onclick="showTab(this, 'graph')">Graph</button>
+          <button class="tab ${activeTab === 'history' ? 'active' : ''}" onclick="showTab(this, 'history')">History</button>
+        </div>
+
+        <div id="tab-graph">
+          <div class="card">
+            <div class="flow-canvas">
+              <div class="flow-graph">
+                ${flow.nodes.map((node, i) => `
+                  ${i > 0 ? '<div class="flow-connector"><div class="connector-line"></div></div>' : ''}
+                  <div class="flow-node">
+                    <div class="node-box ${i === 0 ? 'trigger-node' : ''}" onclick="selectNode(${i})" data-node-index="${i}">
+                      <div class="node-index">${i === 0 ? 'START' : i}</div>
+                      <div class="node-label">${node.label}</div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+          <div id="sourcePanel"></div>
+        </div>
+
+        <div id="tab-history" style="display:none">
+          <div class="card">
+            ${reports.length === 0 ? `
+              <div class="empty-state">
+                <h3>No executions yet</h3>
+                <p>Run this flow to see execution history.</p>
+              </div>
+            ` : `
+              <table class="reports-table">
+                <thead>
+                  <tr>
+                    <th>Execution ID</th>
+                    <th>Trigger</th>
+                    <th>Status</th>
+                    <th>Steps</th>
+                    <th>Started</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${reports.map(r => `
+                    <tr>
+                      <td><span class="exec-id">${r.id.slice(0, 8)}</span></td>
+                      <td>${r.trigger}</td>
+                      <td><span class="badge badge-${r.status === 'success' ? 'success' : 'error'}"><span class="badge-dot"></span>${r.status}</span></td>
+                      <td>${r.stepCount}</td>
+                      <td><span class="timestamp">${formatDate(r.startedAt)}</span></td>
+                      <td>
+                        <div class="actions-row">
+                          <button class="btn btn-secondary btn-sm" onclick="viewReport('${flow.flow}', '${r.id}')">View</button>
+                          <button class="btn btn-secondary btn-sm" onclick="rerunFlow('${flow.flow}', '${r.id}')">Rerun</button>
+                        </div>
+                      </td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          </div>
+        </div>
+      `;
+    }
+
+    function showTab(el, tab) {
+      activeTab = tab;
+      el.parentNode.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('tab-graph').style.display = tab === 'graph' ? '' : 'none';
+      document.getElementById('tab-history').style.display = tab === 'history' ? '' : 'none';
+      
+      // Update URL with tab param
+      const params = new URLSearchParams(window.location.search);
+      params.set('tab', tab);
+      window.history.pushState(null, '', '?' + params.toString());
+    }
+
+    function selectNode(index) {
+      const flow = flows.find(f => f.flow === activeFlow);
+      if (!flow) return;
+      const node = flow.nodes[index];
+
+      // Update selected state
+      document.querySelectorAll('.node-box').forEach(n => n.classList.remove('selected'));
+      const el = document.querySelector(`[data-node-index="${index}"]`);
+      if (el) el.classList.add('selected');
+
+      const panel = document.getElementById('sourcePanel');
+      if (!node.source) {
+        panel.innerHTML = `
+          <div class="source-panel">
+            <div class="source-panel-header">
+              <div class="step-num">${index + 1}</div>
+              ${node.label}
+            </div>
+            <div class="source-code" style="color: var(--text-secondary); font-style: italic;">No source available (native or bound function)</div>
+          </div>`;
+        return;
+      }
+
+      panel.innerHTML = `
+        <div class="source-panel">
+          <div class="source-panel-header">
+            <div class="step-num">${index + 1}</div>
+            ${node.label}
+          </div>
+          <div class="source-code">${highlightJs(node.source)}</div>
+        </div>`;
+    }
+
+    function highlightJs(code) {
+      code = escapeHtml(code);
+      // Keywords
+      code = code.replace(/\b(async|await|const|let|var|return|if|else|for|while|function|new|throw|try|catch|typeof|instanceof|of|in)\b/g, '<span class="kw">$1</span>');
+      // Strings (single, double, backtick)
+      code = code.replace(/(&#39;[^&#]*?&#39;|&quot;[^&]*?&quot;|`[^`]*?`)/g, '<span class="str">$1</span>');
+      // Numbers
+      code = code.replace(/\b(\d+\.?\d*)\b/g, '<span class="num">$1</span>');
+      // Arrow functions
+      code = code.replace(/=&gt;/g, '<span class="op">=&gt;</span>');
+      // Comments
+      code = code.replace(/(\/\/.*)/g, '<span class="cm">$1</span>');
+      // Method calls
+      code = code.replace(/\.([a-zA-Z_]\w*)\(/g, '.<span class="fn">$1</span>(');
+      return code;
+    }
+
+    async function runFlow(name) {
+      const btn = event.target.closest('.btn');
+      const origText = btn.innerHTML;
+      btn.innerHTML = '<div class="spinner"></div> Running...';
+      btn.disabled = true;
+      try {
+        await api(`/api/flows/${name}/run`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        await selectFlow(name);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        btn.innerHTML = origText;
+        btn.disabled = false;
+      }
+    }
+
+    async function rerunFlow(name, execId) {
+      try {
+        await api(`/api/flows/${name}/rerun/${execId}`, { method: 'POST' });
+        await selectFlow(name);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function viewReport(flowName, execId) {
+      const report = await api(`/api/flows/${flowName}/reports/${execId}`);
+      const modal = document.getElementById('reportModal');
+      const title = document.getElementById('modalTitle');
+      const body = document.getElementById('modalBody');
+
+      title.textContent = `${report.flow} - ${report.id.slice(0, 8)}`;
+
+      const duration = report.completedAt
+        ? (new Date(report.completedAt) - new Date(report.startedAt)) + 'ms'
+        : 'N/A';
+
+      body.innerHTML = `
+        <div class="stats-row" style="margin-bottom: 20px">
+          <div class="stat-card">
+            <div class="stat-label">Status</div>
+            <div><span class="badge badge-${report.status === 'success' ? 'success' : 'error'}"><span class="badge-dot"></span>${report.status}</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Trigger</div>
+            <div class="stat-value" style="font-size: 16px">${report.trigger}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Duration</div>
+            <div class="stat-value" style="font-size: 16px">${duration}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Started</div>
+            <div style="font-size: 12px; color: var(--text-secondary)">${formatDate(report.startedAt)}</div>
+          </div>
+        </div>
+
+        ${report.initialInput !== null ? `
+          <div class="io-block" style="margin-bottom: 20px">
+            <div class="io-label">Initial Input</div>
+            <div class="io-content">${formatJson(report.initialInput)}</div>
+          </div>
+        ` : ''}
+
+        <div class="step-detail">
+          ${report.steps.map((step, i) => `
+            <div class="step-accordion" onclick="toggleAccordion(this)">
+              <div class="step-accordion-header">
+                <div class="step-accordion-left">
+                  <div class="step-num" style="background: ${step.status === 'success' ? 'var(--success)' : step.status === 'error' ? 'var(--error)' : 'var(--primary)'}">${i + 1}</div>
+                  <span class="step-accordion-name">${step.action}</span>
+                  <span class="badge badge-${step.status === 'success' ? 'success' : 'error'}" style="margin-left: 8px"><span class="badge-dot"></span>${step.status}</span>
+                  <span class="duration" style="margin-left: 8px; color: var(--text-secondary)">${step.duration}ms</span>
+                </div>
+                <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div class="step-accordion-body">
+                ${step.source ? `
+                  <div class="io-block">
+                    <div class="io-label">Source Code</div>
+                    <div class="source-code">${highlightJs(step.source)}</div>
+                  </div>
+                ` : ''}
+                <div class="io-block">
+                  <div class="io-label">Input</div>
+                  <div class="io-content">${formatJson(step.input)}</div>
+                </div>
+                ${step.output !== null ? `
+                  <div class="io-block">
+                    <div class="io-label">Output</div>
+                    <div class="io-content">${formatJson(step.output)}</div>
+                  </div>
+                ` : ''}
+                ${step.error ? `
+                  <div class="io-block">
+                    <div class="io-label">Error</div>
+                    <div class="io-content" style="color: #f38ba8">${escapeHtml(step.error.message)}</div>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      modal.classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('reportModal').classList.remove('open');
+    }
+
+    function toggleAccordion(el) {
+      if (event.target.closest('.step-accordion-body')) return;
+      el.classList.toggle('open');
+    }
+
+    document.getElementById('reportModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
+
+    function formatJson(obj) {
+      if (obj === null || obj === undefined) return 'null';
+      return escapeHtml(JSON.stringify(obj, null, 2));
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function formatDate(iso) {
+      if (!iso) return 'N/A';
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        + ' ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    init();
+  </script>
+</body>
+</html>

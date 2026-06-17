@@ -1,0 +1,14 @@
+{
+  "name": "flowcraft-demo",
+  "version": "1.0.0",
+  "description": "Demo Express API showcasing flowcraft",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-cron": "^4.3.0"
+  },
+  "license": "MIT"
+}

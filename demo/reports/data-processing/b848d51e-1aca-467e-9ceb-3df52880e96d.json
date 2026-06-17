@@ -1,0 +1,298 @@
+{
+  "id": "b848d51e-1aca-467e-9ceb-3df52880e96d",
+  "flow": "data-processing",
+  "trigger": "manual",
+  "startedAt": "2026-06-17T20:15:28.022Z",
+  "completedAt": "2026-06-17T20:15:28.026Z",
+  "status": "success",
+  "initialInput": null,
+  "steps": [
+    {
+      "index": 0,
+      "action": "generate-data",
+      "input": null,
+      "output": {
+        "items": [
+          {
+            "id": 1,
+            "name": "Item 1",
+            "value": 33,
+            "active": true
+          },
+          {
+            "id": 2,
+            "name": "Item 2",
+            "value": 57,
+            "active": true
+          },
+          {
+            "id": 3,
+            "name": "Item 3",
+            "value": 92,
+            "active": true
+          },
+          {
+            "id": 4,
+            "name": "Item 4",
+            "value": 11,
+            "active": true
+          },
+          {
+            "id": 5,
+            "name": "Item 5",
+            "value": 80,
+            "active": true
+          },
+          {
+            "id": 6,
+            "name": "Item 6",
+            "value": 64,
+            "active": false
+          },
+          {
+            "id": 7,
+            "name": "Item 7",
+            "value": 9,
+            "active": true
+          },
+          {
+            "id": 8,
+            "name": "Item 8",
+            "value": 54,
+            "active": true
+          },
+          {
+            "id": 9,
+            "name": "Item 9",
+            "value": 39,
+            "active": false
+          },
+          {
+            "id": 10,
+            "name": "Item 10",
+            "value": 91,
+            "active": true
+          }
+        ]
+      },
+      "error": null,
+      "duration": 1,
+      "status": "success"
+    },
+    {
+      "index": 1,
+      "action": "filter-active",
+      "input": {
+        "items": [
+          {
+            "id": 1,
+            "name": "Item 1",
+            "value": 33,
+            "active": true
+          },
+          {
+            "id": 2,
+            "name": "Item 2",
+            "value": 57,
+            "active": true
+          },
+          {
+            "id": 3,
+            "name": "Item 3",
+            "value": 92,
+            "active": true
+          },
+          {
+            "id": 4,
+            "name": "Item 4",
+            "value": 11,
+            "active": true
+          },
+          {
+            "id": 5,
+            "name": "Item 5",
+            "value": 80,
+            "active": true
+          },
+          {
+            "id": 6,
+            "name": "Item 6",
+            "value": 64,
+            "active": false
+          },
+          {
+            "id": 7,
+            "name": "Item 7",
+            "value": 9,
+            "active": true
+          },
+          {
+            "id": 8,
+            "name": "Item 8",
+            "value": 54,
+            "active": true
+          },
+          {
+            "id": 9,
+            "name": "Item 9",
+            "value": 39,
+            "active": false
+          },
+          {
+            "id": 10,
+            "name": "Item 10",
+            "value": 91,
+            "active": true
+          }
+        ]
+      },
+      "output": {
+        "items": [
+          {
+            "id": 1,
+            "name": "Item 1",
+            "value": 33,
+            "active": true
+          },
+          {
+            "id": 2,
+            "name": "Item 2",
+            "value": 57,
+            "active": true
+          },
+          {
+            "id": 3,
+            "name": "Item 3",
+            "value": 92,
+            "active": true
+          },
+          {
+            "id": 4,
+            "name": "Item 4",
+            "value": 11,
+            "active": true
+          },
+          {
+            "id": 5,
+            "name": "Item 5",
+            "value": 80,
+            "active": true
+          },
+          {
+            "id": 7,
+            "name": "Item 7",
+            "value": 9,
+            "active": true
+          },
+          {
+            "id": 8,
+            "name": "Item 8",
+            "value": 54,
+            "active": true
+          },
+          {
+            "id": 10,
+            "name": "Item 10",
+            "value": 91,
+            "active": true
+          }
+        ],
+        "totalFiltered": 2
+      },
+      "error": null,
+      "duration": 1,
+      "status": "success"
+    },
+    {
+      "index": 2,
+      "action": "calculate-stats",
+      "input": {
+        "items": [
+          {
+            "id": 1,
+            "name": "Item 1",
+            "value": 33,
+            "active": true
+          },
+          {
+            "id": 2,
+            "name": "Item 2",
+            "value": 57,
+            "active": true
+          },
+          {
+            "id": 3,
+            "name": "Item 3",
+            "value": 92,
+            "active": true
+          },
+          {
+            "id": 4,
+            "name": "Item 4",
+            "value": 11,
+            "active": true
+          },
+          {
+            "id": 5,
+            "name": "Item 5",
+            "value": 80,
+            "active": true
+          },
+          {
+            "id": 7,
+            "name": "Item 7",
+            "value": 9,
+            "active": true
+          },
+          {
+            "id": 8,
+            "name": "Item 8",
+            "value": 54,
+            "active": true
+          },
+          {
+            "id": 10,
+            "name": "Item 10",
+            "value": 91,
+            "active": true
+          }
+        ],
+        "totalFiltered": 2
+      },
+      "output": {
+        "count": 8,
+        "sum": 427,
+        "avg": 53,
+        "min": 9,
+        "max": 92,
+        "filtered": 2
+      },
+      "error": null,
+      "duration": 0,
+      "status": "success"
+    },
+    {
+      "index": 3,
+      "action": "log-result",
+      "input": {
+        "count": 8,
+        "sum": 427,
+        "avg": 53,
+        "min": 9,
+        "max": 92,
+        "filtered": 2
+      },
+      "output": {
+        "count": 8,
+        "sum": 427,
+        "avg": 53,
+        "min": 9,
+        "max": 92,
+        "filtered": 2
+      },
+      "error": null,
+      "duration": 1,
+      "status": "success"
+    }
+  ]
+}
