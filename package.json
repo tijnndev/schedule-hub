@@ -1,6 +1,6 @@
 {
   "name": "schedule-hub",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "A Power Automate-like workflow automation package for Node.js",
   "main": "src/index.js",
   "repository": {
@@ -19,5 +19,9 @@
   "license": "MIT",
   "peerDependencies": {
     "express": "^4.0.0 || ^5.0.0"
+  },
+  "dependencies": {
+    "node-cron": "^4.3.0",
+    "uuid": "^14.0.0"
   }
 }

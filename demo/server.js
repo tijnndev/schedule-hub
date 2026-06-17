@@ -6,7 +6,7 @@ const app = express();
 const PORT = 3000;
 
 // --- Initialize schedule-hub ---
-const craft = new schedule-hub({ reportsDir: path.join(__dirname, 'reports') });
+const craft = new scheduleHub({ reportsDir: path.join(__dirname, 'reports') });
 
 // --- Register some reusable actions ---
 craft.action('log-result', async (input) => {

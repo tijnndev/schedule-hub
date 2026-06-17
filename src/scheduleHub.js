@@ -146,4 +146,4 @@ class scheduleHub {
   }
 }
 
-module.exports = schedule-hub;
+module.exports = scheduleHub;
