@@ -1,3 +1,3 @@
-const schedule-hub = require('./schedule-hub');
+const scheduleHub = require('./schedule-hub');
 
-module.exports = { schedule-hub };
+module.exports = { scheduleHub };

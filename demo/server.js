@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { schedule-hub } = require('../src/index');
+const { scheduleHub } = require('../src/index');
 
 const app = express();
 const PORT = 3000;

@@ -5,7 +5,7 @@ const Scheduler = require('./Scheduler');
 const Reporter = require('./Reporter');
 const ExecutionEngine = require('./ExecutionEngine');
 
-class schedule-hub {
+class scheduleHub {
   constructor(options = {}) {
     const reportsDir = options.reportsDir || './reports';
     this._flows = new Map();
