@@ -1,7 +1,7 @@
 {
-  "name": "flowcraft-demo",
+  "name": "schedule-hub-demo",
   "version": "1.0.0",
-  "description": "Demo Express API showcasing flowcraft",
+  "description": "Demo Express API showcasing schedule-hub",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

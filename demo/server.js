@@ -1,12 +1,12 @@
 const express = require('express');
 const path = require('path');
-const { Flowcraft } = require('../src/index');
+const { schedule-hub } = require('../src/index');
 
 const app = express();
 const PORT = 3000;
 
-// --- Initialize Flowcraft ---
-const craft = new Flowcraft({ reportsDir: path.join(__dirname, 'reports') });
+// --- Initialize schedule-hub ---
+const craft = new schedule-hub({ reportsDir: path.join(__dirname, 'reports') });
 
 // --- Register some reusable actions ---
 craft.action('log-result', async (input) => {
@@ -120,16 +120,16 @@ craft.flow('csv-import')
     return { saved: input.validRows.length };
   });
 
-// --- Mount Flowcraft (dashboard + API + schedules) ---
-app.use('/flowcraft', craft.router());
+// --- Mount schedule-hub (dashboard + API + schedules) ---
+app.use('/schedule-hub', craft.router());
 
 // --- Your own routes work alongside it ---
 app.get('/', (req, res) => {
-  res.json({ message: 'Demo API', dashboard: '/flowcraft' });
+  res.json({ message: 'Demo API', dashboard: '/schedule-hub' });
 });
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
-  console.log(`Flowcraft dashboard: http://localhost:${PORT}/flowcraft`);
+  console.log(`schedule-hub dashboard: http://localhost:${PORT}/schedule-hub`);
 });
     

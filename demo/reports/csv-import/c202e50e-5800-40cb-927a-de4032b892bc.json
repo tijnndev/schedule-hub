@@ -59,7 +59,7 @@
       "output": null,
       "error": {
         "message": "Validation failed: 1 row(s) have negative prices (ids: 2)",
-        "stack": "Error: Validation failed: 1 row(s) have negative prices (ids: 2)\n    at Action.fn (C:\\Development\\Projects\\powerautomate-package\\demo\\server.js:115:13)\n    at Action.execute (C:\\Development\\Projects\\powerautomate-package\\src\\Action.js:9:23)\n    at ExecutionEngine.run (C:\\Development\\Projects\\powerautomate-package\\src\\ExecutionEngine.js:38:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async C:\\Development\\Projects\\powerautomate-package\\src\\Flowcraft.js:120:24"
+        "stack": "Error: Validation failed: 1 row(s) have negative prices (ids: 2)\n    at Action.fn (C:\\Development\\Projects\\powerautomate-package\\demo\\server.js:115:13)\n    at Action.execute (C:\\Development\\Projects\\powerautomate-package\\src\\Action.js:9:23)\n    at ExecutionEngine.run (C:\\Development\\Projects\\powerautomate-package\\src\\ExecutionEngine.js:38:35)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async C:\\Development\\Projects\\powerautomate-package\\src\\schedule-hub.js:120:24"
       },
       "duration": 0,
       "status": "error"

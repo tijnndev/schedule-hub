@@ -5,7 +5,7 @@ const Scheduler = require('./Scheduler');
 const Reporter = require('./Reporter');
 const ExecutionEngine = require('./ExecutionEngine');
 
-class Flowcraft {
+class schedule-hub {
   constructor(options = {}) {
     const reportsDir = options.reportsDir || './reports';
     this._flows = new Map();
@@ -13,7 +13,7 @@ class Flowcraft {
     this._reporter = new Reporter(reportsDir);
     this._engine = new ExecutionEngine(this._reporter);
     this._scheduler = new Scheduler();
-    this._basePath = options.basePath || '/flowcraft';
+    this._basePath = options.basePath || '/schedule-hub';
   }
 
   action(name, fn) {
@@ -146,4 +146,4 @@ class Flowcraft {
   }
 }
 
-module.exports = Flowcraft;
+module.exports = schedule-hub;

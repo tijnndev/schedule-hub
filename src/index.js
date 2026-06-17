@@ -1,3 +1,3 @@
-const Flowcraft = require('./Flowcraft');
+const schedule-hub = require('./schedule-hub');
 
-module.exports = { Flowcraft };
+module.exports = { schedule-hub };

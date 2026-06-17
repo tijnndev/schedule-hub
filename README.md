@@ -1,4 +1,4 @@
-# Flowcraft
+# schedule-hub
 
 A Power Automate-like workflow automation package for Node.js. Define, visualize, execute, and monitor data flows with a beautiful web dashboard.
 
@@ -17,10 +17,10 @@ A Power Automate-like workflow automation package for Node.js. Define, visualize
 ### As a Package
 
 ```bash
-npm install flowcraft
+npm install schedule-hub
 ```
 
-Flowcraft requires `express` as a peer dependency:
+schedule-hub requires `express` as a peer dependency:
 
 ```bash
 npm install express
@@ -36,16 +36,16 @@ cd demo && npm install
 npm start
 ```
 
-Visit `http://localhost:3000/flowcraft`
+Visit `http://localhost:3000/schedule-hub`
 
 ## Quick Start
 
 ```js
 const express = require('express');
-const { Flowcraft } = require('flowcraft');
+const { schedule-hub } = require('schedule-hub');
 
 const app = express();
-const craft = new Flowcraft({ reportsDir: './reports' });
+const craft = new schedule-hub({ reportsDir: './reports' });
 
 // Define a flow
 craft.flow('my-pipeline')
@@ -59,11 +59,11 @@ craft.flow('my-pipeline')
     return { total: input.reduce((a, b) => a + b, 0) };
   });
 
-// Mount Flowcraft (serves dashboard + API + schedules)
-app.use('/flowcraft', craft.router());
+// Mount schedule-hub (serves dashboard + API + schedules)
+app.use('/schedule-hub', craft.router());
 
 app.listen(3000, () => {
-  console.log('Dashboard: http://localhost:3000/flowcraft');
+  console.log('Dashboard: http://localhost:3000/schedule-hub');
 });
 ```
 
@@ -111,7 +111,7 @@ craft.flow('another-flow')
 
 ## Dashboard
 
-The dashboard is accessible at the mount path (default: `/flowcraft`). It provides:
+The dashboard is accessible at the mount path (default: `/schedule-hub`). It provides:
 
 - **Flow Graph** - Visual representation of each flow's steps
 - **Flow Source** - Click any step to view its JavaScript code
@@ -210,9 +210,9 @@ craft.flow('import-users')
 ## Configuration
 
 ```js
-const craft = new Flowcraft({
+const craft = new schedule-hub({
   reportsDir: './reports',  // Where to store execution reports
-  basePath: '/flowcraft'     // Base path for router
+  basePath: '/schedule-hub'     // Base path for router
 });
 ```
 
@@ -222,7 +222,7 @@ const craft = new Flowcraft({
 powerautomate-package/
   src/
     index.js              # Main export
-    Flowcraft.js          # Orchestrator
+    schedule-hub.js          # Orchestrator
     Flow.js               # Flow builder
     Action.js             # Action wrapper
     ExecutionEngine.js    # Executes flows & saves reports
